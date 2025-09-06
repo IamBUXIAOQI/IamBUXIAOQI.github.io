@@ -2,73 +2,118 @@
 <html lang="en">
 
 <head>
-  <!-- 引入外部样式表 -->
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Font Awesome 图标 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-  <title>布小奇BUXIAOQI</title>
+    <!-- 引入外部样式表 -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <title>布小奇BUXIAOQI</title>
 </head>
 
-<body>
-  <!-- 左侧卡片容器 -->
-  <div class="left-card-container">
-    <!-- 头像卡片 -->
-    <div class="avatar-card">
-      <!-- 图片容器 - 用于显示用户头像 -->
-      <div class="imgBx">
-        <img src="img/avatar.png">
-      </div>
-      <!-- 内容区域 - 包含用户信息和交互按钮 -->
-      <div class="content">
-        <div class="details">
-          <h2>布小奇<br><span>BUXIAOQI</span></h2>
-          <!-- 数据统计区域 - 显示帖子数、粉丝数和关注数 -->
-          <div class="data">
-            <h3>342<br><span>点赞</span></h3>
-            <h3>120k<br><span>收藏</span></h3>
-            <h3>285<br><span>关注</span></h3>
-          </div>
-          <!-- 操作按钮区域 - 包含关注和消息按钮 -->
-          <div class="actionBtn">
-            <button>点赞</button>
-            <button>信息</button>
-          </div>
+<body onload="showChromeWarning()">
+    <!-- 左侧卡片容器 -->
+    <div class="left-card-container">
+        <!-- 头像卡片 -->
+        <div class="avatar-card">
+            <!-- 图片容器 - 用于显示用户头像 -->
+            <div class="imgBx">
+                <img src="img/avatar.png">
+            </div>
+            <!-- 内容区域 - 包含用户信息和交互按钮 -->
+            <div class="content">
+                <div class="details">
+                    <h2>布小奇<br><span>BUXIAOQI</span></h2>
+                    <!-- 数据统计区域 - 显示帖子数、粉丝数和关注数 -->
+                    <div class="data">
+                        <h3>342<br><span>点赞</span></h3>
+                        <h3>120k<br><span>收藏</span></h3>
+                        <h3>285<br><span>关注</span></h3>
+                    </div>
+                    <!-- 操作按钮区域 - 包含关注和消息按钮 -->
+                    <div class="actionBtn">
+                        <button>点赞</button>
+                        <button>信息</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <!-- 社交平台卡片 -->
+        <div class="social-card">
+            <div class="button" onclick="openQQModal()">
+                <div class="icon">
+                    <i class="fa-brands fa-qq"></i>
+                </div>
+                <span>QQ</span>
+            </div>
+            <a href="https://space.bilibili.com/410481420" target="_blank"
+                style="text-decoration: none; color: inherit;">
+                <div class="button">
+                    <div class="icon">
+                        <i class="fa-brands fa-bilibili"></i>
+                    </div>
+                    <span>Bilibili</span>
+                </div>
+            </a>
+            <a href="mailto:XZxiaoheng@gmail.com" style="text-decoration: none; color: inherit;">
+                <div class="button">
+                    <div class="icon">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <span>eMail</span>
+                </div>
+            </a>
+            <a href="https://github.com/IamBUXIAOQI" target="_blank"
+                style="text-decoration: none; color: inherit;">
+                <div class="button">
+                    <div class="icon">
+                        <i class="fa-brands fa-github"></i>
+                    </div>
+                    <span>Github</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- QQ图片模态框 -->
+        <div id="qqModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7);">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <span onclick="closeQQModal()" style="position: absolute; top: -30px; right: 0; color: white; font-size: 30px; cursor: pointer;">&times;</span>
+                <img id="qqImage" src="img/QQ.png" alt="QQ二维码" style="max-width: 90vw; max-height: 90vh;">
+            </div>
+        </div>
+
+        <!-- 爱好卡片 -->
+        <div class="hobby-card">
+        </div>
+        <!-- 音乐卡片 -->
+        <div class="music-card">
+        </div>
+    </div>
+    <!-- 右侧卡片容器 -->
+    <div class="right-card-container">
     </div>
 
-    <!-- 社交平台卡片 -->
-    <div class="social-card">
-      <div class="button">
-        <div class="icon">
-          <i class="fa-brands fa-qq"></i>
-        </div>
-        <span>QQ</span>
-      </div>
-      <div class="button">
-        <div class="icon">
-          <i class="fa-brands fa-bilibili"></i>
-        </div>
-        <span>Bilibili</span>
-      </div>
-      <div class="button">
-        <div class="icon">
-          <i class="fa-solid fa-envelope"></i>
-        </div>
-        <span>Mail</span>
-      </div>
-      <div class="button">
-        <div class="icon">
-          <i class="fa-brands fa-github"></i>
-        </div>
-        <span>Github</span>
-      </div>
-    </div>
+    <script>
+        function openQQModal() {
+            document.getElementById('qqModal').style.display = 'block';
+        }
 
-    <!-- 爱好卡片 -->
-    <div class="hobby-card">
-    </div>
-  </div>
+        function closeQQModal() {
+            document.getElementById('qqModal').style.display = 'none';
+        }
+
+        // 当用户点击模态框外部时关闭模态框
+        window.onclick = function(event) {
+            const modal = document.getElementById('qqModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 页面加载时显示Chrome样式错误提示
+        function showChromeWarning() {
+            alert("当前发现Chrome样式错误，不会修");
+        }
+    </script>
 </body>
 
 </html>
