@@ -1,0 +1,966 @@
+我将根据D2L.ai深度学习课程中文学习笔记的需求，创建一个包含课程结构、模型架构总结、知识点可视化等内容的网页。以下是完整的HTML代码：
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D2L.ai深度学习课程中文学习笔记</title>
+    <script src="https://cdn.tailwindcss.com/3.3.3"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.5.0/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #2d3748;
+            overflow-x: hidden;
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px 0 rgba(31, 38, 135, 0.2);
+        }
+        
+        .chart-container {
+            height: 320px;
+            width: 100%;
+            position: relative;
+        }
+        
+        .highlight-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .highlight-text::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background-color: rgba(99, 102, 241, 0.2);
+            z-index: -1;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        .shadow-glow {
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5);
+        }
+        
+        .data-pill {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            background: rgba(99, 102, 241, 0.1);
+            color: #4f46e5;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+        }
+        
+        .timeline-line {
+            width: 2px;
+            background-color: #e5e7eb;
+        }
+        
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            margin: 0.5rem;
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            transform-origin: top;
+            transform: scaleY(0);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 100;
+        }
+        
+        .mobile-menu.active {
+            transform: scaleY(1);
+            opacity: 1;
+        }
+        
+        .mermaid {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 导航条 -->
+    <nav class="glassmorphism sticky top-0 z-50 p-4 mb-8" id="mainNav">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">
+                <i class="fas fa-brain mr-2"></i>D2L.ai深度学习笔记
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#overview" class="text-gray-600 hover:text-indigo-600 transition-colors">课程结构</a>
+                <a href="#models" class="text-gray-600 hover:text-indigo-600 transition-colors">模型架构</a>
+                <a href="#visualization" class="text-gray-600 hover:text-indigo-600 transition-colors">知识点可视化</a>
+                <a href="#resources" class="text-gray-600 hover:text-indigo-600 transition-colors">扩展资源</a>
+            </div>
+            <button class="md:hidden text-gray-600 focus:outline-none" id="mobileMenuButton" aria-label="导航菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- 移动端导航菜单 -->
+            <div class="mobile-menu md:hidden" id="mobileMenu">
+                <a href="#overview" class="text-gray-600 hover:text-indigo-600 transition-colors flex items-center">
+                    <i class="fas fa-sitemap mr-3 text-indigo-500"></i>课程结构
+                </a>
+                <a href="#models" class="text-gray-600 hover:text-indigo-600 transition-colors flex items-center">
+                    <i class="fas fa-project-diagram mr-3 text-indigo-500"></i>模型架构
+                </a>
+                <a href="#visualization" class="text-gray-600 hover:text-indigo-600 transition-colors flex items-center">
+                    <i class="fas fa-chart-bar mr-3 text-indigo-500"></i>知识点可视化
+                </a>
+                <a href="#resources" class="text-gray-600 hover:text-indigo-600 transition-colors flex items-center">
+                    <i class="fas fa-book-open mr-3 text-indigo-500"></i>扩展资源
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 头部横幅 -->
+    <header class="container mx-auto py-16 px-4 md:px-8 relative">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                D2L.ai深度学习课程中文学习笔记
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-600 mb-8">从基础理论到实践应用的完整指南</p>
+            <div class="flex justify-center gap-4">
+                <div class="glassmorphism p-4 text-center w-32">
+                    <div class="text-sm text-gray-500">章节</div>
+                    <div class="text-2xl font-bold text-indigo-600">12+</div>
+                </div>
+                <div class="glassmorphism p-4 text-center w-32">
+                    <div class="text-sm text-gray-500">模型</div>
+                    <div class="text-2xl font-bold text-indigo-600">8+</div>
+                </div>
+                <div class="glassmorphism p-4 text-center w-32">
+                    <div class="text-sm text-gray-500">可视化</div>
+                    <div class="text-2xl font-bold text-indigo-600">20+</div>
+                </div>
+                <div class="glassmorphism p-4 text-center w-32">
+                    <div class="text-sm text-gray-500">资源</div>
+                    <div class="text-2xl font-bold text-indigo-600">50+</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 课程结构部分 -->
+    <section id="overview" class="container mx-auto py-12 px-4 md:px-8">
+        <div class="glassmorphism p-8 mb-16">
+            <h2 class="text-3xl font-bold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white mr-3">
+                    <i class="fas fa-sitemap"></i>
+                </div>
+                课程结构梳理
+            </h2>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-700">基础知识</h3>
+                <div class="pl-6 border-l-4 border-indigo-200">
+                    <h4 class="text-xl font-medium mb-3">深度学习概述与成功案例</h4>
+                    <p class="mb-4">深度学习作为机器学习的重要分支，其核心在于通过多层神经网络对数据进行表示学习，而非依赖任务特定算法。它模拟人脑神经元的层级结构，通过大量节点（神经元）的互联实现信息处理。</p>
+                    
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                        <h5 class="font-semibold text-blue-800 mb-2">核心组成要素</h5>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li class="mb-1"><span class="font-medium">数据</span>：高质量、大规模标注数据是训练基础</li>
+                            <li class="mb-1"><span class="font-medium">模型</span>：多层神经网络结构（如 CNN、RNN、Transformer）</li>
+                            <li class="mb-1"><span class="font-medium">算法</span>：优化器（如 SGD、Adam）与学习策略（如正则化）</li>
+                            <li><span class="font-medium">计算资源</span>：GPU/TPU 提供并行计算支持</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 class="text-xl font-medium mb-3">数学基础</h4>
+                    <p class="mb-4">线性代数是深度学习的语言，涉及标量、向量、矩阵及张量的运算。微积分与自动微分是优化模型的核心工具，概率与统计为模型不确定性建模提供框架。</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <h5 class="font-semibold text-green-800 mb-2">线性代数概念</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li class="mb-1">标量（0 阶张量）</li>
+                                <li class="mb-1">向量（1 阶张量）</li>
+                                <li>矩阵（2 阶张量）</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <h5 class="font-semibold text-purple-800 mb-2">概率分布</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li class="mb-1">正态分布</li>
+                                <li class="mb-1">伯努利分布</li>
+                                <li>最大似然估计</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-xl font-medium mb-3">数据处理技术</h4>
+                    <p class="mb-4">数据操作依赖高效的多维数组结构，如 MXNet 的 NDArray 或 PyTorch 的 Tensor。数据预处理是模型训练的关键步骤。</p>
+                    
+                    <div class="bg-yellow-50 rounded-lg p-4">
+                        <h5 class="font-semibold text-yellow-800 mb-2">数据预处理检查清单</h5>
+                        <ol class="list-decimal pl-5 text-gray-700">
+                            <li class="mb-1">确认数据类型（数值/类别）与范围</li>
+                            <li class="mb-1">处理缺失值时优先保留样本（行）而非特征（列）</li>
+                            <li>转换为张量前确保数据维度对齐</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-700">深度学习基础</h3>
+                <div class="pl-6 border-l-4 border-indigo-200">
+                    <h4 class="text-xl font-medium mb-3">线性模型：从回归到分类的基础构建</h4>
+                    <p class="mb-4">线性回归作为最基础的回归模型，通过最小化均方误差损失函数拟合数据分布。Softmax回归通过将线性输出转化为概率分布实现多类别预测。</p>
+                    
+                    <div class="bg-pink-50 rounded-lg p-4 mb-4">
+                        <h5 class="font-semibold text-pink-800 mb-2">线性模型的局限性</h5>
+                        <p class="text-gray-700">线性模型仅能拟合线性可分数据，其表达能力受限于输入特征的线性组合。当数据存在非线性关系（如异或问题）时，需通过引入非线性变换突破这一限制。</p>
+                    </div>
+                    
+                    <h4 class="text-xl font-medium mb-3">非线性模型：多层感知机与深度网络的诞生</h4>
+                    <p class="mb-4">多层感知机（MLP）通过引入隐藏层与激活函数实现非线性变换，是首个真正意义上的深度网络。</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h5 class="font-semibold text-blue-800 mb-2">激活函数</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li class="mb-1">ReLU</li>
+                                <li class="mb-1">Sigmoid</li>
+                                <li>Tanh</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <h5 class="font-semibold text-green-800 mb-2">实现路径</h5>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li class="mb-1">手动实现</li>
+                                <li>框架实现</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-indigo-700">序列建模</h3>
+                <div class="pl-6 border-l-4 border-indigo-200">
+                    <h4 class="text-xl font-medium mb-3">序列数据建模的核心挑战</h4>
+                    <p class="mb-4">基础RNN通过隐藏状态循环传递机制处理序列，但在训练过程中容易出现梯度消失或爆炸问题。</p>
+                    
+                    <h4 class="text-xl font-medium mb-3">门控机制：LSTM与GRU对长期依赖的突破</h4>
+                    <p class="mb-4">LSTM设计了三个核心门控单元：遗忘门、输入门和输出门。GRU对LSTM进行简化，合并遗忘门与输入门为更新门。</p>
+                    
+                    <div class="bg-purple-50 rounded-lg p-4 mb-4">
+                        <h5 class="font-semibold text-purple-800 mb-2">门控机制的核心价值</h5>
+                        <p class="text-gray-700">通过动态权重分配，使模型既能"记住"关键长期信息（如文章主题），又能"遗忘"冗余短期噪声（如无关修饰词），从根本上缓解了RNN的梯度传播问题。</p>
+                    </div>
+                    
+                    <h4 class="text-xl font-medium mb-3">Transformer：注意力机制与并行计算的革命</h4>
+                    <p class="mb-4">Transformer完全摒弃循环结构，基于自注意力机制实现并行化序列建模，成为NLP领域的里程碑。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 模型架构总结部分 -->
+    <section id="models" class="container mx-auto py-12 px-4 md:px-8">
+        <h2 class="text-3xl font-bold mb-12 text-center">模型架构总结</h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            <div class="glassmorphism p-8 card-hover">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center text-white mr-4 shadow-glow">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold">卷积神经网络（CNN）</h3>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-medium mb-2 text-indigo-700">LeNet奠定基础框架</h4>
+                    <p class="text-gray-600 mb-4">1998年提出的LeNet是CNN的开山之作，专为手写数字识别任务设计，首次确立了"卷积-池化"的经典结构。</p>
+                    
+                    <h4 class="text-lg font-medium mb-2 text-indigo-700">AlexNet开启深度学习时代</h4>
+                    <p class="text-gray-600 mb-4">2012年，AlexNet在ImageNet竞赛中以显著优势夺冠，标志着深度学习的爆发。</p>
+                    
+                    <h4 class="text-lg font-medium mb-2 text-indigo-700">VGG的模块化设计</h4>
+                    <p class="text-gray-600 mb-4">2014年的VGG架构进一步深化网络深度，通过重复堆叠3x3卷积块实现特征逐层抽象。</p>
+                    
+                    <h4 class="text-lg font-medium mb-2 text-indigo-700">ResNet的残差连接</h4>
+                    <p class="text-gray-600 mb-4">2015年的ResNet通过残差连接（跳跃连接）彻底解决梯度消失问题，将网络深度推向数百层。</p>
+                    
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h5 class="font-medium text-blue-800 mb-2">残差连接的梯度保护机制</h5>
+                        <p class="text-gray-700">传统网络中，反向传播时梯度需经过多层权重矩阵相乘，易因数值衰减导致低层参数更新缓慢。残差连接通过shortcut路径将输入x直接传递至输出，使梯度可直接从后层流向前层。</p>
+                    </div>
+                </div>
+                
+                <div id="cnn-architecture" class="mermaid">
+                    graph TD
+                        A[输入图像] --> B[卷积层]
+                        B --> C[ReLU激活]
+                        C --> D[池化层]
+                        D --> E[卷积层]
+                        E --> F[ReLU激活]
+                        F --> G[池化层]
+                        G --> H[全连接层]
+                        H --> I[输出层]
+                </div>
+            </div>
+            
+            <div class="glassmorphism p-8 card-hover">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-4 shadow-glow">
+                        <i class="fas fa-retweet"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold">循环神经网络（RNN）</h3>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-medium mb-2 text-blue-700">基础RNN的局限性</h4>
+                    <p class="text-gray-600 mb-4">递归结构虽能捕捉短期序列模式，但梯度消失问题使其无法有效处理长序列数据中的长期依赖。</p>
+                    
+                    <h4 class="text-lg font-medium mb-2 text-blue-700">LSTM的门控机制</h4>
+                    <p class="text-gray-600 mb-4">LSTM设计了三个核心门控单元：遗忘门、输入门和输出门。</p>
+                    
+                    <h4 class="text-lg font-medium mb-2 text-blue-700">GRU的简化设计</h4>
+                    <p class="text-gray-600 mb-4">GRU对LSTM进行简化，合并遗忘门与输入门为更新门，同时引入重置门。</p>
+                    
+                    <div class="bg-green-50 rounded-lg p-4 mb-4">
+                        <h5 class="font-medium text-green-800 mb-2">LSTM与GRU的门控机制对比</h5>
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="py-2">模型</th>
+                                    <th class="py-2">核心门结构</th>
+                                    <th class="py-2">计算复杂度</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="py-2">LSTM</td>
+                                    <td class="py-2">遗忘门、输入门、输出门</td>
+                                    <td class="py-2">较高</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2">GRU</td>
+                                    <td class="py-2">更新门、重置门</td>
+                                    <td class="py-2">较低</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="rnn-architecture" class="mermaid">
+                    graph LR
+                        A[输入序列] --> B[RNN单元]
+                        B --> C[隐藏状态]
+                        C --> D[输出]
+                        C --> B
+                </div>
+            </div>
+            
+            <div class="glassmorphism p-8 card-hover">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-4 shadow-glow">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold">Transformer架构</h3>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 class="text-lg font-medium mb-2 text-purple-700">编码器与解码器结构</h4>
+                    <p class="text-gray-600 mb-4">Transformer的编码器由6层相同的子层堆叠而成，每层包含多头自注意力机制与前馈神经网络。</p>
+                    
+                    <h4 class="text-lg font-medium mb-2 text-purple-700">多头自注意力机制</h4>
+                    <p class="text-gray-600 mb-4">作为Transformer的核心组件，多头自注意力机制通过并行计算多个自注意力头，捕捉序列中不同位置间的依赖关系。</p>
+                    
+                    <h4 class="text-lg font-medium mb-2 text-purple-700">并行计算优势</h4>
+                    <p class="text-gray-600 mb-4">与RNN需按序列顺序处理不同，Transformer通过自注意力机制实现了序列并行化处理。</p>
+                    
+                    <div class="bg-yellow-50 rounded-lg p-4">
+                        <h5 class="font-medium text-yellow-800 mb-2">核心组件总结</h5>
+                        <p class="text-gray-700">Transformer架构的三大支柱为多头自注意力机制（捕捉长距离依赖）、位置编码（注入序列顺序信息）和编码器-解码器结构（适配生成任务）。</p>
+                    </div>
+                </div>
+                
+                <div id="transformer-architecture" class="mermaid">
+                    graph TD
+                        A[输入序列] --> B[编码器]
+                        B --> C[多头自注意力]
+                        C --> D[前馈网络]
+                        D --> E[编码器输出]
+                        E --> F[解码器]
+                        F --> G[掩码多头自注意力]
+                        G --> H[编码器-解码器注意力]
+                        H --> I[前馈网络]
+                        I --> J[输出序列]
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 知识点可视化部分 -->
+    <section id="visualization" class="container mx-auto py-12 px-4 md:px-8">
+        <h2 class="text-3xl font-bold mb-12 text-center">知识点可视化</h2>
+        
+        <div class="glassmorphism p-8 mb-16">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white mr-3">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                基础概念可视化
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-indigo-700">线性代数知识逻辑图</h4>
+                    <p class="text-gray-600 mb-4">线性代数中的核心概念（标量、向量、矩阵、张量）具有明确的递进扩展关系，其运算规则（如矩阵乘法、广播机制）的差异常是理解难点。</p>
+                    
+                    <div id="linear-algebra" class="mermaid">
+                        graph TD
+                            A[标量] -->|扩展| B[向量]
+                            B -->|堆叠| C[矩阵]
+                            C -->|深度扩展| D[张量]
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-indigo-700">概率分布对比图</h4>
+                    <p class="text-gray-600 mb-4">概率分布是深度学习中描述数据特征与模型不确定性的基础工具，不同分布（如正态分布、伯努利分布）的适用场景常需通过可视化对比强化记忆。</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="probabilityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glassmorphism p-8 mb-16">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                模型架构可视化
+            </h3>
+            
+            <div class="mb-8">
+                <h4 class="text-xl font-medium mb-4 text-blue-700">CNN架构演进对比</h4>
+                <p class="text-gray-600 mb-4">为直观对比不同卷积神经网络的设计差异，建议构建多维度参数对比表，通过结构化数据呈现架构演进规律。</p>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b bg-blue-50">
+                                <th class="py-3 px-4 text-left">模型名称</th>
+                                <th class="py-3 px-4 text-left">层数</th>
+                                <th class="py-3 px-4 text-left">参数量（百万）</th>
+                                <th class="py-3 px-4 text-left">Top-1准确率</th>
+                                <th class="py-3 px-4 text-left">关键创新点</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">AlexNet</td>
+                                <td class="py-3 px-4">8（5卷积+3全连接）</td>
+                                <td class="py-3 px-4">60</td>
+                                <td class="py-3 px-4">57.1%</td>
+                                <td class="py-3 px-4">首次使用ReLU激活与Dropout</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">VGG-16</td>
+                                <td class="py-3 px-4">16（13卷积+3全连接）</td>
+                                <td class="py-3 px-4">138</td>
+                                <td class="py-3 px-4">71.5%</td>
+                                <td class="py-3 px-4">统一使用3×3小卷积核</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4">ResNet-50</td>
+                                <td class="py-3 px-4">50（49卷积+1全连接）</td>
+                                <td class="py-3 px-4">25</td>
+                                <td class="py-3 px-4">76.2%</td>
+                                <td class="py-3 px-4">引入残差连接解决梯度消失</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-xl font-medium mb-4 text-blue-700">Transformer注意力机制</h4>
+                <p class="text-gray-600 mb-4">多头注意力机制的可视化需拆解为三个核心步骤：Q/K/V矩阵的生成、缩放点积注意力计算、多头合并。</p>
+                
+                <div id="attention-mechanism" class="mermaid">
+                    graph LR
+                        A[输入序列] --> B[线性变换]
+                        B --> C[Q矩阵]
+                        B --> D[K矩阵]
+                        B --> E[V矩阵]
+                        C --> F[缩放点积]
+                        D --> F
+                        F --> G[Softmax]
+                        G --> H[加权求和]
+                        E --> H
+                        H --> I[输出]
+                </div>
+            </div>
+        </div>
+        
+        <div class="glassmorphism p-8">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
+                    <i class="fas fa-code-branch"></i>
+                </div>
+                算法流程可视化
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-purple-700">反向传播计算流程</h4>
+                    <p class="text-gray-600 mb-4">反向传播可视化需清晰展示前向传播与反向传播的双向对应关系。</p>
+                    
+                    <div id="backpropagation" class="mermaid">
+                        graph LR
+                            A[输入数据] --> B[前向传播]
+                            B --> C[输出结果]
+                            C --> D[损失计算]
+                            D --> E[反向传播]
+                            E --> F[参数更新]
+                            F --> B
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-purple-700">Adam优化器流程</h4>
+                    <p class="text-gray-600 mb-4">Adam优化器创新性地结合了动量法的一阶矩估计与RMSprop的二阶矩估计，实现了自适应学习率调整。</p>
+                    
+                    <div id="adam-optimizer" class="mermaid">
+                        graph TD
+                            A[梯度g] --> B[一阶矩估计]
+                            A --> C[二阶矩估计]
+                            B --> D[偏差修正]
+                            C --> E[偏差修正]
+                            D --> F[参数更新]
+                            E --> F
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学习重点与难点部分 -->
+    <section id="focus" class="container mx-auto py-12 px-4 md:px-8">
+        <h2 class="text-3xl font-bold mb-12 text-center">学习重点与难点</h2>
+        
+        <div class="glassmorphism p-8 mb-16">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white mr-3">
+                    <i class="fas fa-star"></i>
+                </div>
+                重点章节核心内容
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-indigo-700">深度学习基础</h4>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li class="mb-2"><span class="font-medium">线性回归</span>：理解数学原理与参数估计方法</li>
+                        <li class="mb-2"><span class="font-medium">Softmax回归</span>：掌握将输出转化为概率分布的机制</li>
+                        <li class="mb-2"><span class="font-medium">多层感知机</span>：能够构建简单MLP解决非线性问题</li>
+                        <li><span class="font-medium">模型正则化</span>：熟悉权重衰减等策略控制过拟合</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-indigo-700">卷积神经网络</h4>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li class="mb-2"><span class="font-medium">CNN基础架构</span>：掌握卷积层、池化层的作用</li>
+                        <li class="mb-2"><span class="font-medium">残差连接</span>：理解解决梯度消失问题的原理</li>
+                        <li><span class="font-medium">批量归一化</span>：掌握标准化中间输出稳定训练过程的机制</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-indigo-700">注意力机制</h4>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li class="mb-2"><span class="font-medium">Transformer架构</span>：理解自注意力机制捕捉序列依赖关系的原理</li>
+                        <li><span class="font-medium">多头自注意力</span>：掌握并行计算多个注意力头融合不同子空间特征的逻辑</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-indigo-700">优化算法</h4>
+                    <ul class="list-disc pl-5 text-gray-700">
+                        <li class="mb-2"><span class="font-medium">Adam优化器</span>：熟练掌握参数更新公式</li>
+                        <li><span class="font-medium">深度学习优化挑战</span>：认识局部最小值、鞍点、梯度消失等挑战</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glassmorphism p-8">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                难点解析与常见问题
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-blue-700">梯度消失/爆炸</h4>
+                    <p class="text-gray-600 mb-4">深层神经网络训练中，梯度消失与爆炸是最常见的优化障碍。</p>
+                    
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                        <h5 class="font-medium text-blue-800 mb-2">解决方案</h5>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li class="mb-1">采用ReLU/LeakyReLU替代sigmoid</li>
+                            <li class="mb-1">梯度裁剪限制梯度范数</li>
+                            <li class="mb-1">批归一化稳定各层输入分布</li>
+                            <li>残差连接直接传递梯度</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-blue-700">反向传播计算</h4>
+                    <p class="text-gray-600 mb-4">反向传播是参数更新的核心机制，但其复杂性主要体现在计算图路径追踪与链式法则多层应用。</p>
+                    
+                    <div class="bg-green-50 rounded-lg p-4">
+                        <h5 class="font-medium text-green-800 mb-2">解决方案</h5>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li class="mb-1">利用动态计算图工具分步执行</li>
+                            <li class="mb-1">绘制计算图可视化梯度路径</li>
+                            <li>从简单网络开始逐步过渡</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-blue-700">过拟合与欠拟合</h4>
+                    <p class="text-gray-600 mb-4">模型泛化能力不足表现为欠拟合与过拟合两种极端情况。</p>
+                    
+                    <div class="bg-yellow-50 rounded-lg p-4">
+                        <h5 class="font-medium text-yellow-800 mb-2">针对性解决方案</h5>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li class="mb-1"><span class="font-medium">欠拟合</span>：增加网络层数/神经元数量</li>
+                            <li><span class="font-medium">过拟合</span>：数据增强、L1/L2正则化、Dropout</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-medium mb-4 text-blue-700">Transformer注意力机制</h4>
+                    <p class="text-gray-600 mb-4">多头注意力机制的并行计算逻辑是Transformer理解的难点。</p>
+                    
+                    <div class="bg-purple-50 rounded-lg p-4">
+                        <h5 class="font-medium text-purple-800 mb-2">分解式学习路径</h5>
+                        <ol class="list-decimal pl-5 text-gray-700">
+                            <li class="mb-1">掌握注意力权重计算</li>
+                            <li class="mb-1">拆解多头并行过程</li>
+                            <li>通过代码调试观察不同头的关注点差异</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 扩展学习资源部分 -->
+    <section id="resources" class="container mx-auto py-12 px-4 md:px-8">
+        <h2 class="text-3xl font-bold mb-12 text-center">扩展学习资源</h2>
+        
+        <div class="glassmorphism p-8 mb-16">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white mr-3">
+                    <i class="fas fa-book"></i>
+                </div>
+                官方资源
+            </h3>
+            
+            <div class="mb-8">
+                <h4 class="text-xl font-medium mb-4 text-indigo-700">D2L.ai平台</h4>
+                <p class="text-gray-600 mb-4">提供多版本交互式学习资源，包括中文第二版（zh.d2l.ai）和中文第一版（zh-v1.d2l.ai），支持PyTorch、TensorFlow等主流框架。</p>
+                
+                <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                    <h5 class="font-medium text-blue-800 mb-2">适用场景</h5>
+                    <p class="text-gray-700">初学者建议从中文第二版（zh.d2l.ai）入手，优先完成第2-5章基础内容，配合交互式Notebook实践代码调试，再通过社区论坛解决技术疑问。</p>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <a href="https://zh.d2l.ai" class="data-pill"><i class="fas fa-link mr-1"></i> 中文第二版</a>
+                    <a href="https://zh-v1.d2l.ai" class="data-pill"><i class="fas fa-link mr-1"></i> 中文第一版</a>
+                    <a href="https://github.com/d2l-ai/d2l-zh" class="data-pill"><i class="fab fa-github mr-1"></i> GitHub仓库</a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-xl font-medium mb-4 text-indigo-700">习题解答</h4>
+                <p class="text-gray-600 mb-4">针对《动手学深度学习》课程习题，Dive-Into-Deep-Learning-PyTorch-PDF项目提供中文版第一版所有代码的PyTorch实现。</p>
+                
+                <div class="bg-green-50 rounded-lg p-4 mb-4">
+                    <h5 class="font-medium text-green-800 mb-2">适用场景</h5>
+                    <p class="text-gray-700">完成D2L.ai第3章线性回归后，可参考该项目的PyTorch实现对比不同优化器效果；第8章CNN习题推荐结合VGG与ResNet的特征提取实验代码。</p>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <a href="https://github.com/wzy6642/Dive-Into-Deep-Learning-PyTorch-PDF" class="data-pill"><i class="fab fa-github mr-1"></i> GitHub项目</a>
+                    <a href="https://shimo.im/mindmaps/jkhHr3pCkCYwWWgR" class="data-pill"><i class="fas fa-map mr-1"></i> 配套资源汇总</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glassmorphism p-8 mb-16">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                论文推荐
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg p-4 shadow-sm">
+                    <h4 class="text-lg font-medium mb-2 text-blue-700">Deep Residual Learning</h4>
+                    <p class="text-sm text-gray-600 mb-3">ResNet论文，提出残差连接解决深度网络训练难题</p>
+                    <a href="https://arxiv.org/abs/1512.03385" class="text-blue-600 text-sm flex items-center"><i class="fas fa-external-link-alt mr-1"></i> arXiv链接</a>
+                </div>
+                
+                <div class="bg-white rounded-lg p-4 shadow-sm">
+                    <h4 class="text-lg font-medium mb-2 text-blue-700">Attention Is All You Need</h4>
+                    <p class="text-sm text-gray-600 mb-3">Transformer架构论文，开创自注意力机制先河</p>
+                    <a href="https://arxiv.org/abs/1706.03762" class="text-blue-600 text-sm flex items-center"><i class="fas fa-external-link-alt mr-1"></i> arXiv链接</a>
+                </div>
+                
+                <div class="bg-white rounded-lg p-4 shadow-sm">
+                    <h4 class="text-lg font-medium mb-2 text-blue-700">BERT</h4>
+                    <p class="text-sm text-gray-600 mb-3">双向Transformer预训练模型，NLP领域里程碑</p>
+                    <a href="https://arxiv.org/abs/1810.04805" class="text-blue-600 text-sm flex items-center"><i class="fas fa-external-link-alt mr-1"></i> arXiv链接</a>
+                </div>
+            </div>
+            
+            <div class="mt-6 bg-blue-50 rounded-lg p-4">
+                <h5 class="font-medium text-blue-800 mb-2">适用场景</h5>
+                <p class="text-gray-700">学习第11章Transformer前，建议先阅读《Attention Is All You Need》原文，重点理解自注意力机制的数学推导，再结合D2L.ai代码实现验证理论。</p>
+            </div>
+        </div>
+        
+        <div class="glassmorphism p-8">
+            <h3 class="text-2xl font-semibold mb-6 flex items-center">
+                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 mr-3">
+                    <i class="fas fa-tools"></i>
+                </div>
+                工具库
+            </h3>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b bg-purple-50">
+                            <th class="py-3 px-4 text-left">工具名称</th>
+                            <th class="py-3 px-4 text-left">功能描述</th>
+                            <th class="py-3 px-4 text-left">适用场景</th>
+                            <th class="py-3 px-4 text-left">安装方式</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b">
+                            <td class="py-3 px-4 font-medium">d2l包</td>
+                            <td class="py-3 px-4">自定义层与模型封装，课程配套工具</td>
+                            <td class="py-3 px-4">简化课程代码编写，快速复现书中模型</td>
+                            <td class="py-3 px-4">随D2L.ai章节提供</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="py-3 px-4 font-medium">TensorBoard</td>
+                            <td class="py-3 px-4">训练过程可视化（损失曲线、特征图等）</td>
+                            <td class="py-3 px-4">监控模型收敛过程，调试超参数</td>
+                            <td class="py-3 px-4">PyTorch内置</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="py-3 px-4 font-medium">torchvision</td>
+                            <td class="py-3 px-4">预训练模型与数据集（如ImageNet、CIFAR）</td>
+                            <td class="py-3 px-4">快速加载数据，对比预训练模型性能</td>
+                            <td class="py-3 px-4">pip install torchvision</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-medium">ml-visuals</td>
+                            <td class="py-3 px-4">200+深度学习架构图与可视化图表</td>
+                            <td class="py-3 px-4">论文写作或课件制作时的理论可视化</td>
+                            <td class="py-3 px-4">GitHub下载</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-6 bg-purple-50 rounded-lg p-4">
+                <h5 class="font-medium text-purple-800 mb-2">工具链组合建议</h5>
+                <p class="text-gray-700">使用PyTorch + d2l包构建模型，通过TensorBoard实时查看训练曲线，最终用Weights & Biases记录不同超参数组合的实验结果，形成"开发-调试-分析"闭环。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-100 py-8 mt-16">
+        <div class="container mx-auto px-4 md:px-8 text-center text-gray-600">
+            <p class="mb-2">created by <a href="https://space.coze.cn" class="text-indigo-600 hover:text-indigo-800">coze space</a></p>
+            <p class="text-sm">页面内容均由 AI 生成，仅供参考</p>
+        </div>
+    </footer>
+
+    <script>
+        // 移动端导航菜单切换
+        document.addEventListener('DOMContentLoaded', function() {
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+
+                    // 点击导航链接后关闭移动端菜单
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                        // 同时切换图标回汉堡按钮
+                        const menuIcon = document.querySelector('#mobileMenuButton i');
+                        menuIcon.classList.remove('fa-times');
+                        menuIcon.classList.add('fa-bars');
+                    }
+                });
+            });
+
+            // 移动端导航菜单切换
+            const menuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            menuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+
+                // 切换图标
+                const icon = this.querySelector('i');
+                if (mobileMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // 点击页面其他区域关闭移动端菜单
+            document.addEventListener('click', function(event) {
+                const isClickInsideNav = document.getElementById('mainNav').contains(event.target);
+
+                if (!isClickInsideNav && mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    const icon = menuButton.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // 概率分布对比图
+            const probCtx = document.getElementById('probabilityChart').getContext('2d');
+            new Chart(probCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['均值', '方差', '偏度', '峰度'],
+                    datasets: [
+                        {
+                            label: '正态分布',
+                            data: [0, 1, 0, 0],
+                            backgroundColor: 'rgba(99, 102, 241, 0.6)',
+                            borderColor: 'rgba(99, 102, 241, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '伯努利分布',
+                            data: [0.5, 0.25, 0, -2],
+                            backgroundColor: 'rgba(79, 70, 229, 0.6)',
+                            borderColor: 'rgba(79, 70, 229, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '概率分布统计特性对比'
+                        }
+                    }
+                }
+            });
+
+            // 初始化mermaid图表
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'default',
+                flowchart: {
+                    useMaxWidth: true,
+                    htmlLabels: true,
+                    curve: 'basis'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
